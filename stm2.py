@@ -8,7 +8,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelBinarizer
 
-# 1. Load JSON Data
+#Load JSON Data
 def load_json_data(filepath):
     with open(filepath, 'r') as file:
         data = json.load(file)
@@ -16,7 +16,7 @@ def load_json_data(filepath):
     sarcasm_labels = [entry['is_sarcastic'] for entry in data]
     return headlines, sarcasm_labels
 
-# 2. Preprocessing the text
+#Preprocessing the text
 def preprocess_data(headlines, sarcasm_labels, max_len=100):
     tokenizer = Tokenizer(num_words=5000)
     tokenizer.fit_on_texts(headlines)
@@ -29,7 +29,7 @@ def preprocess_data(headlines, sarcasm_labels, max_len=100):
     
     return X, y, tokenizer
 
-# 3. Create the Deep Learning Model
+#Create the Deep Learning Model
 def create_model(input_dim, embedding_dim=128, lstm_units=128, output_dim=1):
     model = Sequential([
         Embedding(input_dim, embedding_dim, input_length=100),
@@ -41,7 +41,7 @@ def create_model(input_dim, embedding_dim=128, lstm_units=128, output_dim=1):
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
-# 4. Train the Model
+#Train the Model
 def train_and_evaluate_model(json_file):
     headlines, sarcasm_labels = load_json_data(json_file)
     X, y, tokenizer = preprocess_data(headlines, sarcasm_labels)
@@ -56,6 +56,6 @@ def train_and_evaluate_model(json_file):
     model.save('stma.keras')
     return model, tokenizer
 
-# Example usage
+#Example usage
 if __name__ == "__main__":
     model, tokenizer = train_and_evaluate_model('sarcasm.json')
